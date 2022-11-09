@@ -39,7 +39,7 @@ path = "C:\\jason.json"
 options = webdriver.ChromeOptions()
 options.add_argument("--incongnito")
 driver = webdriver.Chrome(options=options) #, executable_path="\\chromedriver.exe"
-wait = WebDriverWait(driver,15) 
+wait = WebDriverWait(driver,5) 
 #endregion
 
 #region Variables setup - Oriented Object Paradigm
@@ -80,7 +80,8 @@ def jsonDeserialize(jason):
 print("UAI - Programacion II - Grupo 4")
 print("- Selenium Automation -")
 print("Start time: ")
-print(datetime_.now())
+excecutionStarttime = datetime_.now()
+print(excecutionStarttime)
 
 def getCredentials():
     CredEnumerate = win32cred.CredEnumerate
@@ -120,7 +121,7 @@ def getCredentials():
 print(getCredentials())
 
 ListaDeClientes = []
-jsonDeserialize(readFile(path),ListaDeClientes)
+jsonDeserialize(readFile(path))
 
 try :
     for cliente in ListaDeClientes:
@@ -168,11 +169,15 @@ try :
 
 except Exception as e :
     print("Exception found" + e.msg)
-    driver.close()
-    driver.quit()
 
 finally:
     driver.close()
     driver.quit()   
 
-    #endregion
+print("End of excecution")
+print("End time: ")
+excecutionEndtime = datetime_.now()
+print(excecutionEndtime)
+timeTaken = excecutionEndtime - excecutionStarttime
+print(f"Opration took: {timeTaken.seconds} seconds")
+#endregion
