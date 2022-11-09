@@ -23,24 +23,17 @@ from urllib.parse import quote_plus
 #from email_config import gmail_pass, user, host
 
 #Other imports
-import datetime
 from datetime import datetime as datetime_
-from datetime import timedelta
 import json
-import requests
 import io
-import sys
-import time
-import os, uuid
 import pywintypes
 import win32cred
-import email
-import imaplib
 #endregion
 
 CRED_TYPE_GENERIC = win32cred.CRED_TYPE_GENERIC
 
 url = "file:C:\\Pagina.html"
+path = "C:\\jason.json"
 
 #region Selenium configuration
 options = webdriver.ChromeOptions()
@@ -51,28 +44,35 @@ wait = WebDriverWait(driver,15)
 
 #region Variables setup - Oriented Object Paradigm
 class Person:
-    def __init__(self, name, surname, email, address, telephone):
-        self.name = name
-        self.surname =  surname
-        self.email = email
-        self.address = address
-        self.telephone = telephone
+    Name = ""
+    Surename = ""
+    Email = ""
+    Address = ""
+    Telephone = ""
+    Query = ""
 
-def buildFormEntry(Person) : 
-    json_data = {
-        "Name" : Person.name,
-        "Surename" : Person.surename,
-        "Email" : Person.email,
-        "Address" : Person.address,
-        "Telephone" : Person.telephone,
-        "Query" : Person.query
-    }
-    
+    def __init__(self, Name, Surename, Email, Address, Telephone,Query):
+        self.Name = Name
+        self.Surename =  Surename
+        self.Email = Email
+        self.Address = Address
+        self.Telephone = Telephone
+        self.Query = Query
+
 def readFile(path):
     print("Reading file")
+    f = open(path, "r")
+    listaPreliminar = f.read()
+    print(listaPreliminar)
+    return listaPreliminar
 
-def jsonDeserialize(json,lista):
+def jsonDeserialize(jason):
     print("Processing JSON file")
+    listaJsonElements = json.loads(jason)
+    for persona in listaJsonElements:
+        auxPersona = Person(**persona) #Mapeo 
+        ListaDeClientes.append(auxPersona)
+    print("JSON file processed")
 
 #endregion
 
@@ -81,12 +81,6 @@ print("UAI - Programacion II - Grupo 4")
 print("- Selenium Automation -")
 print("Start time: ")
 print(datetime_.now())
-
-#def uploadData():
-#    client = pymongo.MongoClient("mongodb+srv://julian:password@cluster0.s9jgwyg.mongodb.net/?retryWrites=true&w=majority")
-#    result = client["Prog2"]["Clients"].find()
-#    #https://www.mongodb.com/languages/python/pymongo-tutorial
-#    print("Client Uploaded")
 
 def getCredentials():
     CredEnumerate = win32cred.CredEnumerate
@@ -126,37 +120,38 @@ def getCredentials():
 print(getCredentials())
 
 ListaDeClientes = []
-jsonDeserialize(readFile(),ListaDeClientes)
+jsonDeserialize(readFile(path),ListaDeClientes)
 
-for cliente in ListaDeClientes:
-    try :
+try :
+    for cliente in ListaDeClientes:
+
         driver.get(url)
 
         #Wait for page to load
         wait.until(EC.presence_of_element_located((By.NAME,"nombre")))
 
         #1. Name 
-        wait.until(EC.element_to_be_clickable((By.ID,"nombre"))).send_keys(cliente.name)
+        wait.until(EC.element_to_be_clickable((By.ID,"nombre"))).send_keys(cliente.Name)
         #time.sleep(0.1)
 
     #2. Surename
-        wait.until(EC.presence_of_element_located((By.ID,"apellido"))).send_keys(cliente.surname)
+        wait.until(EC.presence_of_element_located((By.ID,"apellido"))).send_keys(cliente.Surename)
         #time.sleep(0.1)
 
         #2. Email
-        wait.until(EC.presence_of_element_located((By.NAME,"correo"))).send_keys(cliente.email)
+        wait.until(EC.presence_of_element_located((By.NAME,"correo"))).send_keys(cliente.Email)
         #time.sleep(0.1)
 
         #3. Address >> No anda el cornudo
-        wait.until(EC.presence_of_element_located((By.NAME,"direccion"))).send_keys(cliente.address)
+        wait.until(EC.presence_of_element_located((By.NAME,"direccion"))).send_keys(cliente.Address)
         #time.sleep(0.1)
 
         #4. Telephone number >> No anda el cornudo
-        wait.until(EC.presence_of_element_located((By.NAME,"telefono"))).send_keys(cliente.telephone)
+        wait.until(EC.presence_of_element_located((By.NAME,"telefono"))).send_keys(cliente.Telephone)
         #time.sleep(0.1)
 
         #5. Tipo de consulta
-        wait.until(EC.presence_of_element_located((By.TAG_NAME,"select"))).send_keys(cliente.query)
+        wait.until(EC.presence_of_element_located((By.TAG_NAME,"select"))).send_keys(cliente.Query)
         #time.sleep(0.1)
 
         #6. Espero para mostrar el screen
@@ -168,15 +163,16 @@ for cliente in ListaDeClientes:
         if(boton):
             print("No se encontro el boton")
             print("Intentando con JS...")
-            javas = "document.getElementById('button1')[0].click();" #Clickeo el primer elemento que encuentro
-            driver.execute_script(javas)
+            #javas = "document.getElementById('button1')[0].click();" #Clickeo el primer elemento que encuentro
+            #driver.execute_script(javas)
 
-        driver.close()
-        driver.quit()
+except Exception as e :
+    print("Exception found" + e.msg)
+    driver.close()
+    driver.quit()
 
-    except Exception as e :
-        print("Exception found" + e.msg)
-        driver.close()
-        driver.quit()
+finally:
+    driver.close()
+    driver.quit()   
 
     #endregion
