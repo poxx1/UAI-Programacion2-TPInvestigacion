@@ -5,6 +5,7 @@
 # v0.0 ---> Forms testing
 # v0.1 ---> MongoDB connection
 # v0.2 ---> lalala
+# v0.3 ---> Form changed to html page
 #endregion
 
 #region Imports
@@ -33,12 +34,13 @@ import time
 import os, uuid
 import pywintypes
 import win32cred
-import pymongo
 import email
 import imaplib
 #endregion
 
 CRED_TYPE_GENERIC = win32cred.CRED_TYPE_GENERIC
+
+url = "file:C:\\Pagina.html"
 
 #region Selenium configuration
 options = webdriver.ChromeOptions()
@@ -66,6 +68,12 @@ def buildFormEntry(Person) :
         "Query" : Person.query
     }
     
+def readFile(path):
+    print("Reading file")
+
+def jsonDeserialize(json,lista):
+    print("Processing JSON file")
+
 #endregion
 
 #region Selenium Excecution
@@ -74,55 +82,11 @@ print("- Selenium Automation -")
 print("Start time: ")
 print(datetime_.now())
 
-def uploadData():
-    client = pymongo.MongoClient("mongodb+srv://julian:password@cluster0.s9jgwyg.mongodb.net/?retryWrites=true&w=majority")
-    result = client["Prog2"]["Clients"].find()
-    #https://www.mongodb.com/languages/python/pymongo-tutorial
-    print("Client Uploaded")
-
-def readEmails():
-    #https://iq.opengenus.org/read-gmail-python/
-    mail = imaplib.IMAP4_SSL(host)
-    mail.login(user, gmail_pass)
-    res, messages = mail.select('CLIENTS') #Selects the folder which u want 2 read
-    messages = int(messages[0])
-    for i in range(messages, messages - count, -1):
-            # RFC822 protocol
-            res, msg = mail.fetch(str(i), "(RFC822)")
-            for response in msg:
-                if isinstance(response, tuple):
-                    msg = email.message_from_bytes(response[1])
-
-                    # Store the senders email
-                    sender = msg["From"]
-
-                    # Store subject of the email
-                    subject = msg["Subject"]
-
-                    # Store Body
-                    body = ""
-                    temp = msg
-                    if temp.is_multipart():
-                        for part in temp.walk():
-                            ctype = part.get_content_type()
-                            cdispo = str(part.get('Content-Disposition'))
-
-                            # skip text/plain type
-                            if ctype == 'text/plain' and 'attachment' not in cdispo:
-                                body = part.get_payload(decode=True)  # decode
-                                break
-                    else:
-                        body = temp.get_payload(decode=True)
-
-                    # Print Sender, Subject, Body
-                    print("-"*50)  # To divide the messages
-                    print("From    : ", sender)
-                    print("Subject : ", subject)
-                    if(contain_body):
-                        print("Body    : ", body.decode())
-
-            mail.close()
-            mail.logout()
+#def uploadData():
+#    client = pymongo.MongoClient("mongodb+srv://julian:password@cluster0.s9jgwyg.mongodb.net/?retryWrites=true&w=majority")
+#    result = client["Prog2"]["Clients"].find()
+#    #https://www.mongodb.com/languages/python/pymongo-tutorial
+#    print("Client Uploaded")
 
 def getCredentials():
     CredEnumerate = win32cred.CredEnumerate
@@ -159,47 +123,60 @@ def getCredentials():
                 print(credentialsError)
 
         return credman_creds.getvalue()   
-
 print(getCredentials())
 
-#read_email_from_gmail(3, True)
+ListaDeClientes = []
+jsonDeserialize(readFile(),ListaDeClientes)
 
-#uploadData() 
+for cliente in ListaDeClientes:
+    try :
+        driver.get(url)
 
-try :
-    driver.get("https://forms.gle/yfK3JA4jmy4wXb74A")
+        #Wait for page to load
+        wait.until(EC.presence_of_element_located((By.NAME,"nombre")))
 
-    #Wait for page to load
-    wait.until(EC.presence_of_element_located((By.XPATH,"//*[@id='mG61Hd']/div[2]/div/div[2]/div[1]/div/div/div[2]/div/div[1]/div/div[1]/input")))
+        #1. Name 
+        wait.until(EC.element_to_be_clickable((By.ID,"nombre"))).send_keys(cliente.name)
+        #time.sleep(0.1)
 
-    #1. Name and Surename
-    wait.until(EC.element_to_be_clickable((By.XPATH,"//*[@id='mG61Hd']/div[2]/div/div[2]/div[1]/div/div/div[2]/div/div[1]/div/div[1]/input"))).send_keys("Julian, Lastra")
-    time.sleep(0.1)
+    #2. Surename
+        wait.until(EC.presence_of_element_located((By.ID,"apellido"))).send_keys(cliente.surname)
+        #time.sleep(0.1)
 
-    #2. Email
-    wait.until(EC.element_to_be_clickable((By.XPATH,"//*[@id='mG61Hd']/div[2]/div/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div[1]/input"))).send_keys("julianlastra.kz@gmail.com")
-    time.sleep(0.1)
+        #2. Email
+        wait.until(EC.presence_of_element_located((By.NAME,"correo"))).send_keys(cliente.email)
+        #time.sleep(0.1)
 
-    #3. Address >> No anda el cornudo
-    wait.until(EC.element_to_be_clickable((By.XPATH,"//*[@id='mG61Hd']/div[2]/div/div[2]/div[3]/div/div/div[2]/div/div[1]/div/div[1]/input"))).send_keys("Posadas 289")
-    time.sleep(0.1)
+        #3. Address >> No anda el cornudo
+        wait.until(EC.presence_of_element_located((By.NAME,"direccion"))).send_keys(cliente.address)
+        #time.sleep(0.1)
 
-    #4. Telephone number >> No anda el cornudo
-    wait.until(EC.element_to_be_clickable((By.XPATH,"//*[@id='mG61Hd']/div[2]/div/div[2]/div[4]/div/div/div[2]/div/div[1]/div/div[1]/input"))).send_keys("1159363830")
-    time.sleep(0.1)
+        #4. Telephone number >> No anda el cornudo
+        wait.until(EC.presence_of_element_located((By.NAME,"telefono"))).send_keys(cliente.telephone)
+        #time.sleep(0.1)
 
-    #5. Espero para mostrar el screen
-    time.sleep(5)
+        #5. Tipo de consulta
+        wait.until(EC.presence_of_element_located((By.TAG_NAME,"select"))).send_keys(cliente.query)
+        #time.sleep(0.1)
 
-    #Enviar button
-    wait.until(EC.element_to_be_clickable((By.XPATH,"//*[@id='mG61Hd']/div[2]/div/div[3]/div[1]/div[1]/div/span/span"))).click
+        #6. Espero para mostrar el screen
+        #time.sleep(5)
 
-    driver.close()
-    driver.quit()
+        #7. Enviar button
+        boton = True
+        boton = wait.until(EC.element_to_be_clickable((By.XPATH,"/html/body/form/ul/li[8]/button"))).click
+        if(boton):
+            print("No se encontro el boton")
+            print("Intentando con JS...")
+            javas = "document.getElementById('button1')[0].click();" #Clickeo el primer elemento que encuentro
+            driver.execute_script(javas)
 
-except Exception as e :
-    driver.close()
-    driver.quit()
-    print("Exception found" + e)
+        driver.close()
+        driver.quit()
 
-#endregion
+    except Exception as e :
+        print("Exception found" + e.msg)
+        driver.close()
+        driver.quit()
+
+    #endregion
