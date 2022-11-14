@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UAI - Programacion II - Grupo 4 - Selenium</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <form class="form" action="/formulario" method="post">
+    <h1 class="title">Ernesto Joven y Asociados</h1>
+    <h3 class="subtitle">Sistema de carga de clientes y pedidos:</h3>
+
+    <label class="form__label" for="name">Nombre:</label>
+    <input class="form__input" type="text" id="nombre" name="nombre">
+
+    <label class="form__label" for="name">Apellido:</label>
+    <input class="form__input" type="text" id="apellido" name="apellido">
+
+    <label class="form__label" for="name">Correo:</label>
+    <input class="form__input" type="text" id="correo" name="correo">
+
+    <label class="form__label" for="name">Dirección:</label>
+    <input class="form__input" type="text" id="direccion" name="direccion">
+
+    <label class="form__label" for="name">Teléfono:</label>
+    <input class="form__input" type="text" id="telefono" name="telefono">
+
+    <label class="form__label" for="name">Tipo de consulta:</label>
+    <select class="form__select" name="querys" id="querys">
+      <option value="stock">Stock</option>
+      <option value="listaPrecios">Lista de precios</option>
+      <option value="presupuesto">Presupuesto</option>
+    </select>
+
+    <button class="form__button" type="submit">ENVIAR</button>
+  </form>
+</body>
+</html>

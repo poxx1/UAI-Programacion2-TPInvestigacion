@@ -1,0 +1,90 @@
+[
+    {
+        "name": "Julian",
+        "surname": "Lastra",
+        "email": "julianlastra.kz@gmail.com",
+        "address": "Av. Siempre Viva 1234",
+        "telephone": "1159363830",
+        "query": "stock"
+    },
+    {
+        "name": "Milagros Lucia",
+        "surname": "Balladares",
+        "email": "milagroslucia@gmail.com",
+        "address": "Av. Siempre Viva 4421",
+        "telephone": "1177889966",
+        "query": "listaPrecios"
+    },
+    {
+        "name": "Diego",
+        "surname": "Lattanzio",
+        "email": "diegolattanzio@gmail.com",
+        "address": "Av. Siempre Viva 4321",
+        "telephone": "1122334455",
+        "query": "stock"
+    },
+    {
+        "name": "Ivan",
+        "surname": "Marciano",
+        "email": "ivanmarciano@gmail.com",
+        "address": "Av. Siempre Viva 1111",
+        "telephone": "1199887766",
+        "query": "presupuesto"
+    },
+    {
+        "name": "Felix",
+        "surname": "Tortella",
+        "email": "felixtortella@gmail.com",
+        "address": "Av. Siempre Viva 2233",
+        "telephone": "1122333322",
+        "query": "stock"
+    },
+    {
+        "name": "Patricio",
+        "surname": "Torres",
+        "email": "patriciotores@gmail.com",
+        "address": "Av. Siempre Viva 4411",
+        "telephone": "1144887755",
+        "query": "listaPrecios"
+    },
+    {
+        "name": "Julian",
+        "surname": "Lastra",
+        "email": "julianlastra.kz@gmail.com",
+        "address": "Av. Siempre Viva 1234",
+        "telephone": "1159363830",
+        "query": "stock"
+    },
+    {
+        "name": "Diego",
+        "surname": "Lattanzio",
+        "email": "diegolattanzio@gmail.com",
+        "address": "Av. Siempre Viva 4321",
+        "telephone": "1122334455",
+        "query": "stock"
+    },
+    {
+        "name": "Ivan",
+        "surname": "Marciano",
+        "email": "ivanmarciano@gmail.com",
+        "address": "Av. Siempre Viva 1111",
+        "telephone": "1199887766",
+        "query": "presupuesto"
+    },
+    {
+        "name": "Felix",
+        "surname": "Tortella",
+        "email": "felixtortella@gmail.com",
+        "address": "Av. Siempre Viva 2233",
+        "telephone": "1122333322",
+        "query": "stock"
+    },
+    {
+        "name": "Patricio",
+        "surname": "Torres",
+        "email": "patriciotores@gmail.com",
+        "address": "Av. Siempre Viva 4411",
+        "telephone": "1144887755",
+        "query": "listaPrecios"
+    }
+]
