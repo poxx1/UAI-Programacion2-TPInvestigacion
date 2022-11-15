@@ -47,7 +47,7 @@ def main():
 
     print("End of excecution")
     excecution_end_time = datetime_.now()
-    print("End time: {excecution_end_time}")
+    print(f"End time: {excecution_end_time}")
     time_taken = excecution_end_time - excecution_start_time
     print(f"Opration took: {time_taken.seconds} seconds")
 
